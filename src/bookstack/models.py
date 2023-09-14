@@ -45,10 +45,18 @@ class BookStack:
 
     def _create_api_method(self, method_info):
         def request_method(**kwargs):
-            response = self._session.request(
-                method_info['method'],
-                method_info['uri'].format(**kwargs)
-            )
+
+            if 'query' in kwargs:
+                url_both = method_info['uri'] + "{query}"
+                response = self._session.request(
+                    method_info['method'],
+                    url_both.format(**kwargs)
+                )
+            else:
+                response = self._session.request(
+                    method_info['method'],
+                    method_info['uri'].format(**kwargs)
+                )
             
             return self._get_response_content(response)
 
